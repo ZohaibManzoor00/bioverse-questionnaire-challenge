@@ -8,13 +8,25 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
+model Users {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
 }
 
-model QuestionnaireQuestions {
+model Questionnaires {
   id   Int    @id @default(autoincrement())
   name String
+}
+
+model QuestionnaireJunction {
+  id               Int @id @default(autoincrement())
+  question_id      Int
+  questionnaire_id Int
+  priority         Int
+}
+
+model Questions {
+  id       Int  @id @default(autoincrement())
+  question Json
 }
