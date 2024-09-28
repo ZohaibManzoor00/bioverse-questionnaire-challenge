@@ -13,7 +13,7 @@
 - Next.js
 - Shadcn(UI Library)
 
-*Deployed on cloud run via Docker*
+*Deployed on google cloud run via Docker*
 
 ### Backend
 
