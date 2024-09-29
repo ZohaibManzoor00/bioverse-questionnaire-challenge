@@ -7,7 +7,7 @@ import { Spinner } from "./loading";
 export const WelcomeUserMsg = () => {
   const { user, loading } = useAuth();
 
-  if (loading) return <Spinner />
+  if (loading) return <Spinner className="h-10 w-10" />
 
   if (!user) return null;
 

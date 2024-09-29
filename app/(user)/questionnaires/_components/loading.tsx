@@ -1,5 +1,9 @@
 import { Loader } from "lucide-react";
 
-export const Spinner = () => (
-  <Loader className="animate-spin text-muted-foreground h-8 w-8 mt-1" />
+type SpinnerProps = {
+  className?: string
+};
+
+export const Spinner = ({ className }: SpinnerProps) => (
+  <Loader className={`animate-spin text-muted-foreground ${className}`} />
 );
