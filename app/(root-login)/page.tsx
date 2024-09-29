@@ -1,6 +1,6 @@
-import LoginForm from "./_components/login-form";
+import { LoginForm } from "./_components/login-form";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   return (
     <div className="grid place-content-center min-h-screen">
       <LoginForm />

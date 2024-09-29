@@ -2,16 +2,9 @@
 
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
+import { loginUser } from "../actions/loginUser";
 
-type Role = "admin" | "user";
-
-type User = {
-  username: string;
-  password: string;
-  role: Role;
-};
-
-export default function LoginForm() {
+export const LoginForm = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -20,35 +13,26 @@ export default function LoginForm() {
     e.preventDefault();
 
     const username = usernameRef.current?.value;
-    const password = usernameRef.current?.value;
+    const password = passwordRef.current?.value;
 
     if (!username || !password) {
-      return alert("Please enter both username and password.")
+      return alert("Please enter both username and password.");
     }
     if (username.includes(" ") || password.includes(" ")) {
       return alert("Please enter a valid username and password combination");
     }
 
-    // check if valid combination
-    // const user = await loginUser()
-    // if (!user) return alert("ERROR(401): Sign-in failed")
+    const user = await loginUser({ username, password });
 
-    // if (user.role === 'admin') return router.push('/admin')
-    return router.push('/questionnaires')
-
-    // if (res.ok) {
-    //   // Redirect after successful login
-    //   router.push('/dashboard');
-    // } else {
-    //   // Handle login error
-    //   alert('Login failed. Please check your credentials.');
-    // }
+    if (!user) return alert("Invalid username & password combination");
+    localStorage.setItem("user", JSON.stringify(user));
+    return router.push("/questionnaires");
   };
 
   return (
     <form onSubmit={handleSubmit} className="border-2 p-10">
-      <h1 className="text-2xl mb-10 text-center">Login</h1>
-      <div className="space-y-5">
+      <h1 className="text-3xl mb-10 text-center">Login</h1>
+      <div className="space-y-5 text-lg">
         <div className="flex justify-between">
           <label htmlFor="username" className="mr-2">
             Username
@@ -57,7 +41,7 @@ export default function LoginForm() {
             id="username"
             name="username"
             type="text"
-            className="text-black ml-2 px-2"
+            className="text-black ml-2 px-1"
             ref={usernameRef}
             required
           />
@@ -70,7 +54,7 @@ export default function LoginForm() {
             id="password"
             name="password"
             type="password"
-            className="text-black ml-2 px-2"
+            className="text-black ml-2 px-1"
             ref={passwordRef}
             required
           />
@@ -83,4 +67,4 @@ export default function LoginForm() {
       </div>
     </form>
   );
-}
+};

@@ -1,11 +1,11 @@
 import Link from "next/link";
-import LogoutButton from "./logoutButton";
+import { LogoutButton } from "./logout-button";
 
-export default function Navbar() {
+export const Navbar = async () => {
   return (
-    <nav className="max-w-5xl flex justify-between mt-10 text-2xl mx-auto px-4">
-      <Link href={"/"}>Bioverse</Link>
+    <nav className="max-w-5xl flex justify-between mt-10 text-2xl mx-auto px-6">
+      <Link href={"/questionnaires"}>Bioverse</Link>
       <LogoutButton />
     </nav>
   );
-}
+};

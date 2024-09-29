@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-export default function LogoutButton() {
+export const LogoutButton = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    // clear local storage for user
+    localStorage.removeItem("user")
     router.push("/")
   };
 

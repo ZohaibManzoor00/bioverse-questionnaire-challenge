@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Navbar } from "../_components/navbar";
 import "../globals.css";
-import Navbar from "../_components/navbar";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -17,13 +17,18 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Zo's Bioverse Challenge",
-  description: "Technical challenge from Bioverse. Solution from Zohaib Manzoor",
+  description:
+    "Technical challenge from Bioverse. Solution from Zohaib Manzoor",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <Navbar />
         {children}
       </body>
