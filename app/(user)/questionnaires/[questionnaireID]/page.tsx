@@ -1,9 +1,18 @@
+import { NotFound } from "@/app/_components/error-not-found";
 import { Questionnaire } from "./_components/questionnaire";
 
-export default async function QuestionnairePage({ params }: { params: { questionnaireID: string } }) {
+type QuestionnairePageProps = {
+  params: { questionnaireID: string };
+};
+
+export default async function QuestionnairePage({ params }: QuestionnairePageProps) {
+  const questionnaireID = Number(params.questionnaireID)
+  
+  if (!questionnaireID) return <NotFound msg="Sorry, we couldn't find the page you're looking for."/> 
+
   return (
-    <div className="max-w-5xl mt-10 px-6 mx-auto">
-      <Questionnaire questionnaireId={Number(params.questionnaireID)}/>
-    </div>
+    <main className="max-w-5xl px-6 mx-auto">
+      <Questionnaire questionnaireId={Number(params.questionnaireID)} />
+    </main>
   );
 }
