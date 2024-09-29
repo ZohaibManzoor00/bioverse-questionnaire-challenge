@@ -1,39 +1,28 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useFormState, useFormStatus } from "react-dom";
 
-import { loginUser } from "../actions/loginUser";
+import { loginUserAction } from "../actions/loginUser";
+import { Spinner } from "@/app/(user)/questionnaires/_components/loading";
 
 export const LoginForm = () => {
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
+  const [state, formAction] = useFormState(loginUserAction, { errors: {} });
+  const { pending } = useFormStatus()
+  const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const username = usernameRef.current?.value;
-    const password = passwordRef.current?.value;
-
-    if (!username || !password) {
-      return alert("Please enter both username and password.");
+  useEffect(() => {
+    if (state.user) {
+      localStorage.setItem("user", JSON.stringify(state.user))
+      router.push('/questionnaires')
     }
-    if (username.includes(" ") || password.includes(" ")) {
-      return alert("Please enter a valid username and password combination");
-    }
-
-    const user = await loginUser({ username, password });
-
-    if (!user) return alert("Invalid username & password combination");
-    localStorage.setItem("user", JSON.stringify(user));
-    return router.push("/questionnaires");
-  };
+  }, [pending, state.user])
 
   return (
-    <form onSubmit={handleSubmit} className="border-2 p-10">
+    <form action={formAction} className="border-2 p-10">
       <h1 className="text-3xl mb-10 text-center">Login</h1>
-      <div className="space-y-5 text-lg">
+      <div className="text-lg space-y-6">
         <div className="flex justify-between">
           <label htmlFor="username" className="mr-2">
             Username
@@ -43,8 +32,7 @@ export const LoginForm = () => {
             name="username"
             type="text"
             className="text-black ml-2 px-1"
-            ref={usernameRef}
-            required
+            // required
           />
         </div>
         <div className="flex justify-between">
@@ -56,16 +44,38 @@ export const LoginForm = () => {
             name="password"
             type="password"
             className="text-black ml-2 px-1"
-            ref={passwordRef}
-            required
+            // required
           />
         </div>
       </div>
+      <div className="mt-6">
+        {state.errors?.username && (
+          <p className="text-red-500 text-md">{state.errors.username}</p>
+        )}
+        {state.errors?.password && (
+          <p className="text-red-500 text-md">{state.errors.password}</p>
+        )}
+        {state.errors?.general && (
+          <p className="text-red-500 text-md">{state.errors.general}</p>
+        )}
+      </div>
       <div className="flex justify-end">
-        <button type="submit" className="border-2 px-2 mt-8">
-          Login
-        </button>
+        <SubmitBtn />
       </div>
     </form>
+  );
+};
+
+const SubmitBtn = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className="border-2 px-2 hover:border-zinc-500 py-1"
+      disabled={pending}
+    >
+      {pending ? <Spinner className="h-6" /> : "Login"}
+    </button>
   );
 };
