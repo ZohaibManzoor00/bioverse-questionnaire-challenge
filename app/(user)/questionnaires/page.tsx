@@ -11,7 +11,7 @@ export default async function QuestionnairesPage() {
         <h1 className="mr-2">Welcome</h1>
         <WelcomeUserMsg />
       </div>
-      <h3 className="text-xl">Select a questionnaire to get started</h3>
+      <h2 className="text-xl">Select a questionnaire to get started</h2>
       <div className="pt-5">
         <QuestionnaireList questionnaires={allQuestionnaires} />
       </div>
