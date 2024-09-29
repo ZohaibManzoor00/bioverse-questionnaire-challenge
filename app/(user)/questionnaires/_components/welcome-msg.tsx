@@ -7,7 +7,7 @@ import { Spinner } from "./loading";
 export const WelcomeUserMsg = (): JSX.Element | null => {
   const { user, loading } = useAuth();
 
-  if (loading) return <Spinner className="h-10 w-10" />
+  if (loading) return <Spinner className="h-9 w-6" />
 
   if (!user) return null;
 
