@@ -13,7 +13,11 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export default function SignInLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+type SignInLayoutProps = {
+  children: React.ReactNode;
+}
+
+export default function SignInLayout({ children }: SignInLayoutProps) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

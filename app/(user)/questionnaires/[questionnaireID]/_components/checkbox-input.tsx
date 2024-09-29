@@ -1,12 +1,14 @@
-import React from "react";
+type CheckboxInputProps = {
+  options: string[];
+};
 
-export default function CheckboxInput({ options }: { options: string[] }) {
+export const CheckboxInput = ({ options }: CheckboxInputProps) => {
   return (
     <>
-      {options.map((option, index) => (
-        <li key={index}>
+      {options.map((option) => (
+        <li key={option}>
           <label className="text-lg">
-            <input type="checkbox" value={option} className="mr-1"/>
+            <input type="checkbox" value={option} className="mr-1" />
             {option}
           </label>
         </li>

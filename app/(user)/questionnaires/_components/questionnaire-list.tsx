@@ -1,11 +1,11 @@
 import { Questionnaire } from "@prisma/client";
 import { QuestionnaireItem } from "./questionnaire-item";
 
-export const QuestionnaireList = async ({
-  questionnaires,
-}: {
-  questionnaires: Questionnaire[];
-}) => {
+type QuestionnaireListProps = {
+  questionnaires: Questionnaire[]
+}
+
+export const QuestionnaireList = async ({ questionnaires }: QuestionnaireListProps) => {
   return (
     <ul className="grid grid-cols-2 gap-x-6 gap-y-6">
       {questionnaires.map((q) => (

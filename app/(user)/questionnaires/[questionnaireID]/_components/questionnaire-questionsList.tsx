@@ -1,13 +1,16 @@
 import { Question } from "@prisma/client";
+
 import { TextInput } from "./text-input";
 import { RadioInput } from "./radio-input";
-import CheckboxInput from "./checkbox-input";
+import { CheckboxInput } from "./checkbox-input";
+
+type QuestionnaireQuestionsListProps = {
+  questionnaireQuestions: Question[];
+};
 
 export const QuestionnaireQuestionsList = async ({
   questionnaireQuestions,
-}: {
-  questionnaireQuestions: Question[];
-}) => {
+}: QuestionnaireQuestionsListProps) => {
   return (
     <ul className="space-y-10">
       {questionnaireQuestions.map((q) => {
@@ -24,7 +27,10 @@ export const QuestionnaireQuestionsList = async ({
                 {parsedQuestion.question.includes("Select all that apply") ? (
                   <CheckboxInput options={parsedQuestion.options} />
                 ) : (
-                  <RadioInput name={`${q.id}`} options={parsedQuestion.options} />
+                  <RadioInput
+                    name={`${q.id}`}
+                    options={parsedQuestion.options}
+                  />
                 )}
               </ul>
             )}

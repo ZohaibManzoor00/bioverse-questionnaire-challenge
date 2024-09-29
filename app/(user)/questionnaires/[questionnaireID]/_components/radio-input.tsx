@@ -1,4 +1,9 @@
-export const RadioInput = ({ name, options }: { name: string, options: string[] }) => {
+type RadioInputProps = {
+  name: string;
+  options: string[];
+};
+
+export const RadioInput = ({ name, options }: RadioInputProps) => {
   return (
     <>
       {options.map((option, index) => (

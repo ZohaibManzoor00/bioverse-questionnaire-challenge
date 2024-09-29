@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { Spinner } from "./loading";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
+import { Spinner } from "./loading";
 
 export const WelcomeUserMsg = () => {
   const { user, loading } = useAuth();
