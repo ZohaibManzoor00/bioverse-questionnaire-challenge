@@ -7,7 +7,7 @@ type QuestionnaireItemProps = {
   questionnaire: Questionnaire;
 };
 
-export const QuestionnaireItem = async ({ questionnaire }: QuestionnaireItemProps) => {
+export const QuestionnaireItem = async ({ questionnaire }: QuestionnaireItemProps): Promise<JSX.Element> => {
   return (
     <Link
       href={`questionnaires/${questionnaire.id}`}

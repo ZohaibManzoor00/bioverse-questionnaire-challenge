@@ -2,7 +2,7 @@ type CheckboxInputProps = {
   options: string[];
 };
 
-export const CheckboxInput = ({ options }: CheckboxInputProps) => {
+export const CheckboxInput = ({ options }: CheckboxInputProps): JSX.Element => {
   return (
     <>
       {options.map((option) => (

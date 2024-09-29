@@ -4,6 +4,6 @@ type SpinnerProps = {
   className?: string
 };
 
-export const Spinner = ({ className }: SpinnerProps) => (
+export const Spinner = ({ className }: SpinnerProps): JSX.Element => (
   <Loader className={`animate-spin text-muted-foreground ${className}`} />
 );

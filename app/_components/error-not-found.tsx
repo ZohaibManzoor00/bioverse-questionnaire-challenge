@@ -4,7 +4,7 @@ type NotFoundProps = {
   msg: string;
 };
 
-export const NotFound = ({ msg }: NotFoundProps) => {
+export const NotFound = ({ msg }: NotFoundProps): JSX.Element => {
   return (
     <div className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">

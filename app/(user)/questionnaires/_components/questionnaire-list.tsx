@@ -5,7 +5,7 @@ type QuestionnaireListProps = {
   questionnaires: Questionnaire[]
 }
 
-export const QuestionnaireList = async ({ questionnaires }: QuestionnaireListProps) => {
+export const QuestionnaireList = async ({ questionnaires }: QuestionnaireListProps): Promise<JSX.Element> => {
   return (
     <ul className="grid grid-cols-2 gap-x-6 gap-y-6">
       {questionnaires.map((q) => (

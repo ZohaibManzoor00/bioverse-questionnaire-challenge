@@ -3,7 +3,7 @@ type RadioInputProps = {
   options: string[];
 };
 
-export const RadioInput = ({ name, options }: RadioInputProps) => {
+export const RadioInput = ({ name, options }: RadioInputProps): JSX.Element => {
   return (
     <>
       {options.map((option, index) => (

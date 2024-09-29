@@ -27,7 +27,7 @@ type PrevStateProps = {
 };
 
 export const loginUserAction = async (
-  prevState: PrevStateProps,
+  _: PrevStateProps,
   formData: FormData
 ): Promise<PrevStateProps> => {
   const username = formData.get("username") as string;
