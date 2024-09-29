@@ -10,11 +10,10 @@ type QuestionnaireProps = {
   questionnaireId: number;
 };
 
-export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps) => {
+export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps): Promise<JSX.Element> => {
   const questionInfo = await getQuestionsByQuestionnaireId(questionnaireId);
 
-  if (!questionInfo) 
-    return <NotFound msg={"The questionnaire you are looking for does not exist."}/>;
+  if (!questionInfo) return <NotFound msg={"The questionnaire you are looking for does not exist."}/>;
 
   const { questionnaireQuestions, questionnaireName } = questionInfo;
 

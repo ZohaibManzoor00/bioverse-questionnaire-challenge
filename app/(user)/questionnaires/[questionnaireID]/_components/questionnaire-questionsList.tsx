@@ -8,17 +8,19 @@ type QuestionnaireQuestionsListProps = {
   questionnaireQuestions: Question[];
 };
 
+type ParsedQuestionProps = {
+  type: string;
+  question: string;
+  options?: string[];
+};
+
 export const QuestionnaireQuestionsList = async ({
   questionnaireQuestions,
-}: QuestionnaireQuestionsListProps) => {
+}: QuestionnaireQuestionsListProps): Promise<JSX.Element> => {
   return (
     <ul className="space-y-10">
       {questionnaireQuestions.map((q) => {
-        const parsedQuestion = q.question as {
-          type: string;
-          question: string;
-          options?: string[];
-        };
+        const parsedQuestion = q.question as ParsedQuestionProps
         return (
           <li key={q.id} className="bg-zinc-800 p-4 rounded-md">
             <h1 className="text-xl font-bold">{parsedQuestion.question}</h1>
