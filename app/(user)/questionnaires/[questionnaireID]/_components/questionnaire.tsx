@@ -25,7 +25,7 @@ export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps): Pr
         <Link
           href={"/"}
           type="button"
-          className="hover:border-zinc-500 border-2 border-zinc-700 rounded-md px-6 py-1 text-lg"
+          className="hover:border-zinc-500 border-2 border-zinc-700 rounded-sm px-4 py-[2px] text-lg"
         >
           Submit
         </Link>
