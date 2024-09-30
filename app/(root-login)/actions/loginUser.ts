@@ -4,7 +4,7 @@ import { db } from "@/utils/db/db";
 import { User } from "@prisma/client";
 
 type LogInCredentialsProps = Pick<User, "username" | "password">;
-type LoggedInUser = Omit<User, "password">;
+export type LoggedInUser = Omit<User, "password">;
 
 const loginUser = async ({
   username,
