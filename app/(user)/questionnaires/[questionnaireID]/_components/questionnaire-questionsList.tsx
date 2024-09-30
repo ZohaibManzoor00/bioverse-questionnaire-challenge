@@ -85,6 +85,8 @@ export const QuestionnaireQuestionsList = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (isFormDisabled) return router.push('/questionnaires')
+
     submitQuestionnaireAction({
       responses: allResponses,
       userId: user?.id,
@@ -153,7 +155,7 @@ export const QuestionnaireQuestionsList = ({
         })}
       </ul>
       <div className="my-8 flex justify-end">
-        <SubmitBtn />
+        <SubmitBtn displayText={isFormDisabled ? "Go back" : "Submit"}/>
       </div>
     </form>
   );
