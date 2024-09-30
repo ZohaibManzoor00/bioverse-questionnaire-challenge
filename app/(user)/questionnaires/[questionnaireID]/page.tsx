@@ -12,7 +12,7 @@ export default async function QuestionnairePage({ params }: QuestionnairePagePro
 
   return (
     <main className="max-w-5xl px-6 mx-auto">
-      <Questionnaire questionnaireId={Number(params.questionnaireID)} />
+      <Questionnaire questionnaireId={questionnaireID} />
     </main>
   );
 }

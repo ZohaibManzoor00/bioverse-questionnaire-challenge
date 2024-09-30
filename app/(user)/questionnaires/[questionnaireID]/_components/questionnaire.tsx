@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { getQuestionsByQuestionnaireId } from "../actions/getQuestionnaireQuestions";
 import { QuestionnaireQuestionsList } from "./questionnaire-questionsList";
 import { NotFound } from "@/app/_components/error-not-found";
@@ -21,15 +19,6 @@ export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps): Pr
     <div className="mt-10">
       <h1 className="text-3xl mb-8">{capitalizeFirstLetter(questionnaireName)}</h1>
       <QuestionnaireQuestionsList questionnaireQuestions={questionnaireQuestions} />
-      <div className="my-8 flex justify-end">
-        <Link
-          href={"/"}
-          type="button"
-          className="hover:border-zinc-500 border-2 border-zinc-700 rounded-sm px-4 py-[2px] text-lg"
-        >
-          Submit
-        </Link>
-      </div>
     </div>
   );
 };
