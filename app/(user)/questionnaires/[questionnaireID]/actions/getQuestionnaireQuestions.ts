@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/utils/db/db";
-import { Question } from "@prisma/client";
+import { Question, Submission } from "@prisma/client";
 
 import { QuestionnaireResponsesProps } from "../_components/questionnaire-questionsList";
 
@@ -81,4 +81,9 @@ export const submitQuestionnaireAction = async (
     userId: prevState.userId,
     status: "completed",
   };
+};
+
+export const getUserSubmission = async (userId: number, questionnaireId: string): Promise<Submission[]> => {
+  const submissions = await db.submission.findMany({ where: { userId, questionnaireId: +questionnaireId } });
+  return submissions
 };
