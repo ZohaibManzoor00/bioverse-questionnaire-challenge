@@ -24,7 +24,7 @@ export const CheckboxInput = ({
   };
 
   return (
-    <>
+    <ul>
       {options.map((option) => (
         <li key={option}>
           <label className="text-lg">
@@ -41,6 +41,6 @@ export const CheckboxInput = ({
           </label>
         </li>
       ))}
-    </>
+    </ul>
   );
 };

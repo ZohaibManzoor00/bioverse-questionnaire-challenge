@@ -9,10 +9,7 @@ type SubmitBtnProps = {
   className?: string;
 };
 
-export const SubmitBtn = ({
-  displayText = "submit",
-  className,
-}: SubmitBtnProps): JSX.Element => {
+export const SubmitBtn = ({ displayText = "submit", className }: SubmitBtnProps): JSX.Element => {
   const { pending } = useFormStatus();
 
   return (

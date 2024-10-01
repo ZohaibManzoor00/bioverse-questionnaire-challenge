@@ -18,7 +18,7 @@ export const RadioInput = ({
   };
 
   return (
-    <>
+    <ul>
       {options.map((option) => (
         <li key={option}>
           <label className="text-lg">
@@ -35,6 +35,6 @@ export const RadioInput = ({
           </label>
         </li>
       ))}
-    </>
+    </ul>
   );
 };

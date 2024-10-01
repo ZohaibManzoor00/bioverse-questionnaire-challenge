@@ -5,9 +5,12 @@ import { Question, Submission } from "@prisma/client";
 
 import { QuestionnaireResponsesProps } from "../_components/questionnaire-questionsList";
 
-export const getQuestionsByQuestionnaireId = async (
-  questionnaireId: number
-) => {
+type QuestionnaireQuestionsProps = {
+  questionnaireName: string;
+  questionnaireQuestions: Question[];
+}
+
+export const getQuestionsByQuestionnaireId = async (questionnaireId: number): Promise<QuestionnaireQuestionsProps | null> => {
   const questionnaire = await db.questionnaire.findUnique({
     where: { id: questionnaireId },
     include: {
@@ -19,10 +22,7 @@ export const getQuestionsByQuestionnaireId = async (
 
   const questions = questionnaire.junction.map((j) => j.question as Question);
 
-  return {
-    questionnaireName: questionnaire.name,
-    questionnaireQuestions: questions,
-  };
+  return { questionnaireName: questionnaire.name, questionnaireQuestions: questions };
 };
 
 type SubmitQuestionnaireProps = {
@@ -31,11 +31,7 @@ type SubmitQuestionnaireProps = {
   responses: QuestionnaireResponsesProps[];
 };
 
-const submitQuestionnaire = async ({
-  userId,
-  questionnaireId,
-  responses,
-}: SubmitQuestionnaireProps) => {
+const submitQuestionnaire = async ({ userId, questionnaireId, responses }: SubmitQuestionnaireProps) => {
   const submissions = await Promise.all(
     responses.map((response) =>
       db.submission.create({
@@ -60,15 +56,12 @@ type PrevStateProps = {
   questionnaireID?: string;
 };
 
-export const submitQuestionnaireAction = async (
-  prevState: PrevStateProps
-): Promise<PrevStateProps> => {
-  if (!prevState?.userId || !prevState.questionnaireID || !prevState.responses)
-    return { status: "failed" };
+export const submitQuestionnaireAction = async (prevState: PrevStateProps): Promise<PrevStateProps> => {
+  if (!prevState.userId || !prevState.questionnaireID || !prevState.responses) return { status: "failed" };
 
-  const formattedResponses = Object.entries(prevState.responses).map(
-    ([questionId, response]) => ({ questionId, response })
-  );
+  const formattedResponses = Object.entries(prevState.responses).map(([questionId, response]) => (
+    { questionId, response }
+  ));
 
   await submitQuestionnaire({
     userId: prevState.userId,
@@ -76,11 +69,7 @@ export const submitQuestionnaireAction = async (
     responses: formattedResponses,
   });
 
-  return {
-    responses: prevState.responses,
-    userId: prevState.userId,
-    status: "completed",
-  };
+  return { responses: prevState.responses, userId: prevState.userId, status: "completed" };
 };
 
 export const getUserSubmission = async (userId: number, questionnaireId: string): Promise<Submission[]> => {

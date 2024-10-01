@@ -6,10 +6,7 @@ import { User } from "@prisma/client";
 type LogInCredentialsProps = Pick<User, "username" | "password">;
 export type LoggedInUser = Omit<User, "password">;
 
-const loginUser = async ({
-  username,
-  password,
-}: LogInCredentialsProps): Promise<LoggedInUser> => {
+const loginUser = async ({ username, password }: LogInCredentialsProps): Promise<LoggedInUser> => {
   const userInfo = (await db.user.findUnique({
     where: { username, password },
     select: { id: true, username: true, isAdmin: true },
@@ -26,10 +23,7 @@ type PrevStateProps = {
   user?: LoggedInUser;
 };
 
-export const loginUserAction = async (
-  _: PrevStateProps,
-  formData: FormData
-): Promise<PrevStateProps> => {
+export const loginUserAction = async (_: PrevStateProps, formData: FormData): Promise<PrevStateProps> => {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 

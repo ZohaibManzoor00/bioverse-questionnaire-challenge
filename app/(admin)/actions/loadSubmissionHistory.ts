@@ -22,6 +22,7 @@ export const loadSubmissionHistory = async (userId: number): Promise<SubmissionH
             select: {
               name: true,
               submissions: {
+                where: { userId },
                 select: {
                   question: {
                     select: {

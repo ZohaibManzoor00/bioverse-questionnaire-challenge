@@ -17,8 +17,7 @@ export const LoginForm = (): JSX.Element => {
   useEffect(() => {
     if (state.user) {
       localStorage.setItem("user", JSON.stringify(state.user));
-      if (state.user.isAdmin) return router.push("/admin-panel");
-      router.push("/questionnaires");
+      router.push(state.user.isAdmin ? "/admin-panel" : "/questionnaires")
     }
   }, [state.user]);
 
