@@ -9,9 +9,7 @@ type ParsedQuestion = {
   options?: string[];
 };
 
-export const loadSubmissionHistory = async (
-  userId: number
-): Promise<SubmissionHistoryProps> => {
+export const loadSubmissionHistory = async (userId: number): Promise<SubmissionHistoryProps | null> => {
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
@@ -42,8 +40,10 @@ export const loadSubmissionHistory = async (
     },
   });
 
+  if (!user) return null
+
   return {
-    id: user?.id,
+    id: user.id,
     username: user?.username,
     questionnaires: user?.submissions.map((submission) => ({
       questionnaireId: submission.questionnaireId,

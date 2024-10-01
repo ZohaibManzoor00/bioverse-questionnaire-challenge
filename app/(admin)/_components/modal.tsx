@@ -1,36 +1,47 @@
-import { ReactNode } from "react";
+import { SubmissionHistoryProps } from "./submission-table";
+import { NotFound } from "./not-found";
+import { SubmissionDetails } from "./submission-details";
+
+import { capitalizeFirstLetter } from "@/utils/common-utils";
 
 type ModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
+  selectedUser: SubmissionHistoryProps;
+  setSelectedUser: (selectedUser: SubmissionHistoryProps | null) => void;
+  closeModal: () => void;
 };
 
-export const Modal = async ({ isOpen, onClose, children }: ModalProps) => {
-  if (!isOpen) return null;
-
+export const Modal = ({ selectedUser, closeModal }: ModalProps): JSX.Element => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900 bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full">
-        <div className="flex justify-between items-center pb-3">
-          <h3 className="text-lg font-semibold">Modal Title</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            &times;
-          </button>
+    <>
+      {selectedUser && (
+        <div className="fixed p-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center min-h-80 overflow-y-scroll">
+          <div className="bg-zinc-900 rounded-md h-[500px] w-[800px] overflow-y-auto">
+            <div className="flex justify-end pr-4 mt-3 mb-1">
+              <button
+                onClick={closeModal}
+                className="px-3 border-2 text-xs border-zinc-600 hover:border-zinc-500 bg-zinc-800 rounded-sm"
+              >
+                X
+              </button>
+            </div>
+            <div className="px-4 pb-4">
+              <div className="flex items-center justify-between gap-x-10">
+                <h2 className="text-2xl font-bold">
+                  {capitalizeFirstLetter(selectedUser.username ?? "")}
+                </h2>
+                <div className="flex items-center gap-x-1 text-lg">
+                  <p className="">Completed:</p>
+                  <p className="font-bold">{selectedUser.questionnaires?.length}</p>
+                </div>
+              </div>
+              {selectedUser.questionnaires?.length === 0 
+                ? <NotFound />
+                : <SubmissionDetails selectedUser={selectedUser} />
+              }
+            </div>
+          </div>
         </div>
-        <div className="pb-4">{children}</div>
-        <div className="flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-red-500 text-white rounded-md"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };

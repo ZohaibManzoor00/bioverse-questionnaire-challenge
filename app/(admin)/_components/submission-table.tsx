@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { SubmissionAggregatesProps } from "./submission-history";
+import { useAuth } from "@/hooks/useAuth";
 import { loadSubmissionHistory } from "../actions/loadSubmissionHistory";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
-import Image from "next/image";
-import { useAuth } from "@/hooks/useAuth";
+
 import { Spinner } from "@/app/(user)/questionnaires/_components/loading";
+import { Modal } from "./modal";
 
 export type SubmissionHistoryProps = {
-  id?: number;
-  username?: string;
-  questionnaires?: {
+  id: number;
+  username: string;
+  questionnaires: {
     questionnaireId: number;
     questionnaireName: string;
     questions: {
@@ -23,27 +24,32 @@ export type SubmissionHistoryProps = {
   }[];
 };
 
-type ParsedQuestion = {
+export type ParsedQuestion = {
   type: string;
   question: string;
   options?: string[];
+};
+
+export type SubmissionAggregatesProps = {
+  id: number;
+  questionnairesCompleted: number;
+  username: string;
 };
 
 type SubmissionTableProps = {
   submissionAggregates: SubmissionAggregatesProps[];
 };
 
-export const SubmissionTable = ({
-  submissionAggregates,
-}: SubmissionTableProps) => {
+export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps): JSX.Element => {
+  const [selectedUser, setSelectedUser] = useState<SubmissionHistoryProps | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] =
-    useState<SubmissionHistoryProps | null>(null);
-  const { user, loading } = useAuth();
-  
-  if (!loading) return <Spinner />
+  const router = useRouter();
 
-  if (!user || !user.isAdmin) return null 
+  const { user, loading } = useAuth();
+
+  if (loading) return <Spinner />;
+
+  if (!user || !user.isAdmin) router.back();
 
   const openModal = async (person: SubmissionAggregatesProps) => {
     const userHistory = await loadSubmissionHistory(person.id);
@@ -93,92 +99,19 @@ export const SubmissionTable = ({
                     <td className="whitespace-nowrap px-3 py-4 text-md pl-28">
                       {person.questionnairesCompleted}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-md pl-6 text-indigo-500">
+                    <td className="whitespace-nowrap px-3 py-4 text-md pl-6 text-zinc-500 hover:text-zinc-200">
                       <button onClick={() => openModal(person)}>View</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
             {isModalOpen && selectedUser && (
-              <div className="fixed p-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center min-h-80 overflow-y-scroll">
-                <div className="bg-zinc-900 rounded-md h-[500px] w-[800px] overflow-y-auto">
-                  <div className="flex justify-end pr-4 mt-3 mb-1">
-                    <button
-                      onClick={closeModal}
-                      className="px-3 border-2 text-xs border-zinc-600 hover:border-zinc-500 bg-zinc-800 rounded-sm"
-                    >
-                      X
-                    </button>
-                  </div>
-                  <div className="px-4 pb-4">
-                    <div className="flex items-center justify-between gap-x-10">
-                      <h2 className="text-2xl font-bold">
-                        {capitalizeFirstLetter(selectedUser.username ?? "")}
-                      </h2>
-                      <div className="flex items-center gap-x-1 text-lg">
-                        <p className="">Completed:</p>
-                        <p className="font-bold">
-                          {selectedUser.questionnaires?.length}
-                        </p>
-                      </div>
-                    </div>
-
-                    {selectedUser.questionnaires?.length === 0 ? (
-                      <div className="mt-4">
-                        <div className="h-full w-full flex flex-col justify-center items-center">
-                          <Image
-                            src={"/not-found.png"}
-                            height={10}
-                            width={300}
-                            alt="Not found"
-                          />
-                          <h1 className="text-xl -mt-10">
-                            No submissions yet.
-                          </h1>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {selectedUser.questionnaires?.map((questionnaire) => (
-                          <div
-                            className="mt-4 p-4 bg-zinc-800 rounded-md"
-                            key={questionnaire.questionnaireId}
-                          >
-                            <h3 className="text-lg font-semibold">
-                              Questionnaire:{" "}
-                              {capitalizeFirstLetter(
-                                questionnaire.questionnaireName
-                              )}
-                            </h3>
-                            <ul>
-                              {questionnaire.questions.map((question) => {
-                                const parsedQuestion =
-                                  question.questionInfo as ParsedQuestion;
-                                return (
-                                  <li
-                                    key={question.questionId}
-                                    className="bg-zinc-900 rounded-md mt-4 p-4 space-y-2"
-                                  >
-                                    <h1>Q: {parsedQuestion.question}</h1>
-                                    <h1 className="font-bold">
-                                      A:{" "}
-                                      {Array.isArray(question.response)
-                                        ? question.response.join(", ")
-                                        : question.response}
-                                    </h1>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <Modal
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+                closeModal={closeModal}
+              />
             )}
           </div>
         </div>

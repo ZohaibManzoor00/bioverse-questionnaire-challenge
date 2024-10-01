@@ -1,32 +1,7 @@
-import { db } from "@/utils/db/db";
+import { loadSubmissionAggregates } from "../actions/loadSubmissionAggregates";
 import { SubmissionTable } from "./submission-table";
 
-export type SubmissionAggregatesProps = {
-  id: number;
-  questionnairesCompleted: number;
-  username: string;
-};
-
-const loadSubmissionAggregates = async (): Promise<SubmissionAggregatesProps[]> => {
-  "use server"
-  const users = await db.user.findMany({
-    select: {
-      id: true,
-      username: true,
-      submissions: {
-        select: { questionnaireId: true },
-        distinct: ["questionnaireId"],
-      },
-    },
-  });
-
-  return users.map((user) => ({
-    ...user,
-    questionnairesCompleted: user.submissions.length,
-  }));
-};
-
-export const SubmissionAggregates = async () => {
+export const SubmissionAggregates = async (): Promise<JSX.Element> => {
   const submissionAggregates = await loadSubmissionAggregates();
 
   return <SubmissionTable submissionAggregates={submissionAggregates} />;
