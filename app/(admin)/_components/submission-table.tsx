@@ -43,6 +43,8 @@ type SubmissionTableProps = {
 export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps): JSX.Element => {
   const [selectedUser, setSelectedUser] = useState<SubmissionHistoryProps | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loadingModalData, setLoadingModalData] = useState(false)
+
   const router = useRouter();
 
   const { user, loading } = useAuth();
@@ -52,9 +54,11 @@ export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps):
   if (!user || !user.isAdmin) router.back();
 
   const openModal = async (person: SubmissionAggregatesProps) => {
+    setLoadingModalData(true)
     const userHistory = await loadSubmissionHistory(person.id);
     setIsModalOpen(true);
     setSelectedUser(userHistory);
+    setLoadingModalData(false)
   };
 
   const closeModal = () => {
@@ -63,7 +67,7 @@ export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps):
   };
 
   return (
-    <div className="bg-zinc-900 rounded-md p-4">
+    <div className={`bg-zinc-900 rounded-md p-4 ${loadingModalData ? "animate-pulse" : ""}`}>
       <div className="flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
