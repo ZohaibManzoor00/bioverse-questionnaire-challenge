@@ -19,7 +19,7 @@ export const TextInput = ({
       required
       value={selectedOption}
       disabled={disabled}
-      className="w-full mt-2 p-2 bg-zinc-700"
+      className={`w-full mt-2 p-2 bg-zinc-700 ${disabled ? 'cursor-not-allowed' : null}`}
       placeholder="Write your response here..."
     />
   );

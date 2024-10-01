@@ -11,7 +11,6 @@
 ### Frontend
 
 - Next.js
-- Shadcn(UI Library)
 
 *Deployed on Google Cloud Run via Docker*
 

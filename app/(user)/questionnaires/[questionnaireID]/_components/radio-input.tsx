@@ -21,7 +21,7 @@ export const RadioInput = ({
     <ul>
       {options.map((option) => (
         <li key={option}>
-          <label className="text-lg">
+          <label className={`text-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
             <input
               name={name}
               onChange={handleChange}
@@ -30,7 +30,7 @@ export const RadioInput = ({
               value={option}
               required
               disabled={disabled && option !== selectedOption}
-              className={`mr-1 ${disabled ? "cursor-not-allowed" : ""}`}
+              className="mr-1"
             />
             {option}
           </label>

@@ -27,7 +27,7 @@ export const CheckboxInput = ({
     <ul>
       {options.map((option) => (
         <li key={option}>
-          <label className="text-lg">
+          <label className={`text-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
             <input
               name={`${name}-${option}`}
               value={option}
@@ -36,7 +36,7 @@ export const CheckboxInput = ({
               onChange={handleChange}
               required={selectedOptions.includes(option)}
               type="checkbox"
-              className={`mr-1 ${disabled ? "cursor-not-allowed" : ""}`}
+              className="mr-2"
             />
             {option}
           </label>
