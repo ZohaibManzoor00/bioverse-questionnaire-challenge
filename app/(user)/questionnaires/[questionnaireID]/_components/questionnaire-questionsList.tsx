@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { Question, Submission } from "@prisma/client";
-import { useFormState, useFormStatus } from "react-dom";
+import { Question } from "@prisma/client";
+import { useFormState } from "react-dom";
 
 import { TextInput } from "./text-input";
 import { RadioInput } from "./radio-input";
@@ -19,7 +19,7 @@ import { useParams, useRouter } from "next/navigation";
 type QuestionnaireQuestionsListProps = {
   questionnaireQuestions: Question[];
 };
-type ParsedQuestionProps = {
+type ParsedQuestion = {
   type: string;
   question: string;
   options?: string[];
@@ -100,9 +100,9 @@ export const QuestionnaireQuestionsList = ({
     <form onSubmit={handleSubmit}>
       <ul className="space-y-10">
         {questionnaireQuestions.map((q) => {
-          const parsedQuestion = q.question as ParsedQuestionProps;
+          const parsedQuestion = q.question as ParsedQuestion;
           return (
-            <li key={q.id} className="bg-zinc-800 p-4 rounded-md">
+            <li key={q.id} className="bg-zinc-900 p-4 rounded-md">
               <h1 className="text-xl font-bold">{parsedQuestion.question}</h1>
               {parsedQuestion.options && parsedQuestion.type === "mcq" && (
                 <ul className="mt-2 space-y-2">

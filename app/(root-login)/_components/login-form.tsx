@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 
 import { loginUserAction } from "../actions/loginUser";
 
@@ -17,6 +17,7 @@ export const LoginForm = (): JSX.Element => {
   useEffect(() => {
     if (state.user) {
       localStorage.setItem("user", JSON.stringify(state.user));
+      if (state.user.isAdmin) return router.push("/admin-panel");
       router.push("/questionnaires");
     }
   }, [state.user]);

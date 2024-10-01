@@ -22,11 +22,11 @@ export const metadata: Metadata = {
     "Technical challenge from Bioverse. Solution from Zohaib Manzoor",
 };
 
-type QuestionnaireLayoutProps = {
+type AdminLayoutProps = {
   children: React.ReactNode;
 }
 
-export default function QuestionnaireLayout({ children }: QuestionnaireLayoutProps): JSX.Element {
+export default function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
   return (
     <html lang="en">
       <body
