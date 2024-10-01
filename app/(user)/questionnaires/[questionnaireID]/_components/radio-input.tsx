@@ -28,6 +28,7 @@ export const RadioInput = ({
               checked={selectedOption === option}
               type="radio"
               value={option}
+              required
               disabled={disabled && option !== selectedOption}
               className={`mr-1 ${disabled ? "cursor-not-allowed" : ""}`}
             />

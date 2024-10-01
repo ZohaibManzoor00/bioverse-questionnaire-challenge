@@ -12,7 +12,6 @@ export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps): Pr
   const questionInfo = await getQuestionsByQuestionnaireId(questionnaireId);
   if (!questionInfo) return <NotFound msg={"The questionnaire you are looking for does not exist."}/>;
   
-  console.log(questionInfo)
   const { questionnaireQuestions, questionnaireName } = questionInfo;
 
   return (

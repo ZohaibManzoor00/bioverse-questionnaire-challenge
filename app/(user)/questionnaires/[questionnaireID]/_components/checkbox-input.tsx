@@ -29,11 +29,12 @@ export const CheckboxInput = ({
         <li key={option}>
           <label className="text-lg">
             <input
-              name={name}
+              name={`${name}-${option}`}
               value={option}
               checked={selectedOptions.includes(option)}
               disabled={disabled}
               onChange={handleChange}
+              required={selectedOptions.includes(option)}
               type="checkbox"
               className={`mr-1 ${disabled ? "cursor-not-allowed" : ""}`}
             />

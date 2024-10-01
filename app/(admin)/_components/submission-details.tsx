@@ -14,7 +14,6 @@ export const SubmissionDetails = ({ selectedUser }: SubmissionDetailsProps): JSX
           key={questionnaire.questionnaireId}
         >
           <h3 className="text-lg font-semibold">
-            Questionnaire:{" "}
             {capitalizeFirstLetter(questionnaire.questionnaireName)}
           </h3>
           <ul>

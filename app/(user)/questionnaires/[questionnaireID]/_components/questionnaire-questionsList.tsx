@@ -15,6 +15,7 @@ import {
   submitQuestionnaireAction,
 } from "../actions/getQuestionnaireQuestions";
 import { useParams, useRouter } from "next/navigation";
+import { useTrackFieldsCompletion } from "@/hooks/useTrackFieldsCompletion";
 
 type QuestionnaireQuestionsListProps = {
   questionnaireQuestions: Question[];
@@ -34,6 +35,7 @@ export const QuestionnaireQuestionsList = ({
   );
   const [user, setUser] = useState<LoggedInUser | null>(null);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
+  const { fieldProgress, isComplete } = useTrackFieldsCompletion(questionnaireQuestions, allResponses)
 
   const router = useRouter();
   const { questionnaireID } = useParams();
@@ -87,6 +89,8 @@ export const QuestionnaireQuestionsList = ({
 
     if (isFormDisabled) return router.push('/questionnaires')
 
+    if (!isComplete) return 
+    
     submitQuestionnaireAction({
       responses: allResponses,
       userId: user?.id,
@@ -98,6 +102,9 @@ export const QuestionnaireQuestionsList = ({
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="flex justify-end -mt-14 mb-8">
+        <h1 className="text-xl">{fieldProgress}</h1>
+      </div>
       <ul className="space-y-10">
         {questionnaireQuestions.map((q) => {
           const parsedQuestion = q.question as ParsedQuestion;
