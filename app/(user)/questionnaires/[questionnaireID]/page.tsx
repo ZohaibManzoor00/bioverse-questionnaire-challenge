@@ -1,4 +1,4 @@
-import { NotFound } from "@/app/_components/error-not-found";
+import { NotFound } from "@/app/(admin)/_components/not-found";
 import { Questionnaire } from "./_components/questionnaire";
 
 type QuestionnairePageProps = {

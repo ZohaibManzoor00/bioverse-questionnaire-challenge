@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Navbar } from "../_components/navbar";
+import { Navbar } from "../(root-login)/_components/navbar";
 
 import localFont from "next/font/local";
 import "../globals.css";
@@ -24,9 +24,11 @@ export const metadata: Metadata = {
 
 type AdminLayoutProps = {
   children: React.ReactNode;
-}
+};
 
-export default function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
+export default function AdminLayout({
+  children,
+}: AdminLayoutProps): JSX.Element {
   return (
     <html lang="en">
       <body

@@ -1,6 +1,6 @@
 import { getQuestionsByQuestionnaireId } from "../actions/getQuestionnaireQuestions";
+import { NotFound } from "@/app/(admin)/_components/not-found";
 import { QuestionnaireQuestionsList } from "./questionnaire-questionsList";
-import { NotFound } from "@/app/_components/error-not-found";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 
 type QuestionnaireProps = {

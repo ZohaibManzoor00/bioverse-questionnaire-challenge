@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SubmitBtn } from "../(root-login)/_components/submit-btn";
+import { SubmitBtn } from "./submit-btn";
 
 type NotFoundProps = {
   msg: string;
