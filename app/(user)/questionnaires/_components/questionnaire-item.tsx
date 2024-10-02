@@ -11,9 +11,9 @@ export const QuestionnaireItem = async ({ questionnaire }: QuestionnaireItemProp
   return (
     <Link
       href={`questionnaires/${questionnaire.id}`}
-      className="p-20 bg-zinc-900 cursor-pointer rounded-md flex justify-center items-center h-[200px]"
+      className="p-20 bg-zinc-900 hover:bg-zinc-800 cursor-pointer rounded-md flex justify-center items-center h-[200px]"
     >
-      <h1 className="text-lg">{capitalizeFirstLetter(questionnaire.name)}</h1>
+      <h1 className="text-xl">{capitalizeFirstLetter(questionnaire.name)}</h1>
     </Link>
   );
 };

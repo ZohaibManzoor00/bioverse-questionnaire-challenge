@@ -1,13 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { useAuth } from "@/hooks/useAuth";
 import { loadSubmissionHistory } from "../actions/loadSubmissionHistory";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
-
-import { Spinner } from "@/app/(user)/questionnaires/_components/loading";
 import { Modal } from "./modal";
 
 export type SubmissionHistoryProps = {
@@ -43,22 +38,20 @@ type SubmissionTableProps = {
 export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps): JSX.Element => {
   const [selectedUser, setSelectedUser] = useState<SubmissionHistoryProps | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loadingModalData, setLoadingModalData] = useState(false)
-
-  const router = useRouter();
-
-  const { user, loading } = useAuth();
-
-  if (loading) return <Spinner />;
-
-  if (!user || !user.isAdmin) router.back();
+  const [loadingModalData, setLoadingModalData] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const openModal = async (person: SubmissionAggregatesProps) => {
-    setLoadingModalData(true)
-    const userHistory = await loadSubmissionHistory(person.id);
-    setIsModalOpen(true);
-    setSelectedUser(userHistory);
-    setLoadingModalData(false)
+    setLoadingModalData(true);
+    try {
+      const userHistory = await loadSubmissionHistory(person.id);
+      setSelectedUser(userHistory);
+      setIsModalOpen(true);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoadingModalData(false);
+    }
   };
 
   const closeModal = () => {
@@ -74,35 +67,16 @@ export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps):
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold sm:pl-0"
-                  >
-                    Username
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-lg font-semibold"
-                  >
-                    Questionnaires Completed
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-lg font-semibold"
-                  >
-                    History
-                  </th>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-lg font-semibold sm:pl-0">Username</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-lg font-semibold">Questionnaires Completed</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-lg font-semibold">History</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-500">
                 {submissionAggregates.map((person) => (
                   <tr key={person.id}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-md font-medium sm:pl-0">
-                      {capitalizeFirstLetter(person.username)}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-md pl-28">
-                      {person.questionnairesCompleted}
-                    </td>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-md font-medium sm:pl-0">{capitalizeFirstLetter(person.username)}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-md pl-28">{person.questionnairesCompleted}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-md pl-6 text-zinc-500 hover:text-zinc-200">
                       <button onClick={() => openModal(person)}>View</button>
                     </td>
@@ -110,13 +84,8 @@ export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps):
                 ))}
               </tbody>
             </table>
-            {isModalOpen && selectedUser && (
-              <Modal
-                selectedUser={selectedUser}
-                setSelectedUser={setSelectedUser}
-                closeModal={closeModal}
-              />
-            )}
+            {isModalOpen && selectedUser && <Modal selectedUser={selectedUser} closeModal={closeModal} />}
+            {error && <p className="mt-4 text-lg">Error: {error.message}</p>}
           </div>
         </div>
       </div>

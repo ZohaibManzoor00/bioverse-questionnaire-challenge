@@ -9,9 +9,7 @@ export const TextInput = ({
   selectedOption,
   disabled,
 }: TextInputProps): JSX.Element => {
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    onChange(e.target.value);
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => onChange(e.target.value);
 
   return (
     <textarea
