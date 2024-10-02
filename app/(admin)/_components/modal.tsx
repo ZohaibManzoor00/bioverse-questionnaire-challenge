@@ -1,12 +1,10 @@
 import { SubmissionHistoryProps } from "./submission-table";
 import { NotFound } from "./not-found";
 import { SubmissionDetails } from "./submission-details";
-
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 
 type ModalProps = {
   selectedUser: SubmissionHistoryProps;
-  setSelectedUser: (selectedUser: SubmissionHistoryProps | null) => void;
   closeModal: () => void;
 };
 

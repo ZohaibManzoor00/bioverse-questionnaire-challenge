@@ -1,58 +1,49 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Question } from "@prisma/client";
-import { useFormState } from "react-dom";
+import { useParams, useRouter } from "next/navigation";
+
+import { getUserSubmission, submitQuestionnaireAction } from "../actions/getQuestionnaireQuestions";
+import { useTrackFieldsCompletion } from "@/hooks/useTrackFieldsCompletion";
+import { useAuth } from "@/hooks/useAuth";
 
 import { TextInput } from "./text-input";
 import { RadioInput } from "./radio-input";
 import { CheckboxInput } from "./checkbox-input";
 import { SubmitBtn } from "@/app/(root-login)/_components/submit-btn";
-import { LoggedInUser } from "@/app/(root-login)/actions/loginUser";
-import {
-  getUserSubmission,
-  submitQuestionnaireAction,
-} from "../actions/getQuestionnaireQuestions";
-import { useParams, useRouter } from "next/navigation";
-import { useTrackFieldsCompletion } from "@/hooks/useTrackFieldsCompletion";
 
 type QuestionnaireQuestionsListProps = {
   questionnaireQuestions: Question[];
 };
+
 type ParsedQuestion = {
   type: string;
   question: string;
   options?: string[];
 };
+
 export type QuestionnaireResponsesProps = Record<string, string | string[]>;
 
-export const QuestionnaireQuestionsList = ({
-  questionnaireQuestions,
-}: QuestionnaireQuestionsListProps): JSX.Element => {
-  const [allResponses, setAllResponses] = useState<QuestionnaireResponsesProps>(
-    {}
-  );
-  const [user, setUser] = useState<LoggedInUser | null>(null);
+export const QuestionnaireQuestionsList = ({ questionnaireQuestions }: QuestionnaireQuestionsListProps): JSX.Element => {
+  const [allResponses, setAllResponses] = useState<QuestionnaireResponsesProps>({});
   const [isFormDisabled, setIsFormDisabled] = useState(false);
-  const { fieldProgress, isComplete } = useTrackFieldsCompletion(questionnaireQuestions, allResponses)
-
-  const router = useRouter();
+  
+  const { fieldProgress, isComplete } = useTrackFieldsCompletion(questionnaireQuestions, allResponses);
   const { questionnaireID } = useParams();
+  const { user, loading } = useAuth()
+  const router = useRouter();
 
   useEffect(() => {
-    const jsonUser = localStorage.getItem("user");
-    if (!jsonUser) return router.push("/");
-
-    const parsedUser = JSON.parse(jsonUser) as LoggedInUser;
-    setUser(parsedUser);
-    state.userId = parsedUser.id;
+    if (loading) return 
+    if (!user) return router.push('/');
 
     const fetchPreviousSubmissions = async () => {
       const previousSubmissions = await getUserSubmission(
-        parsedUser.id,
+        user?.id,
         questionnaireID as string
       );
+
       if (!previousSubmissions || previousSubmissions.length === 0) return;
 
       const formattedResponses: QuestionnaireResponsesProps =
@@ -60,16 +51,14 @@ export const QuestionnaireQuestionsList = ({
           (acc: QuestionnaireResponsesProps, prevSub) => {
             acc[prevSub.questionId] = prevSub.response as string[];
             return acc;
-          },
-          {}
-        );
+          }, {});
 
       setIsFormDisabled(true);
       setAllResponses(formattedResponses);
     };
 
     fetchPreviousSubmissions();
-  }, []);
+  }, [user, loading, questionnaireID, router]);
 
   const handleInputChange = (questionId: string, value: string | string[]) => {
     setAllResponses((prevResponses) => ({
@@ -78,19 +67,11 @@ export const QuestionnaireQuestionsList = ({
     }));
   };
 
-  const [state, _formAction] = useFormState(submitQuestionnaireAction, {
-    responses: allResponses,
-    userId: user?.id,
-    questionnaireID: questionnaireID as string,
-  });
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isFormDisabled) return router.push("/questionnaires");
+    if (!isComplete) return;
 
-    if (isFormDisabled) return router.push('/questionnaires')
-
-    if (!isComplete) return 
-    
     submitQuestionnaireAction({
       responses: allResponses,
       userId: user?.id,
@@ -118,43 +99,25 @@ export const QuestionnaireQuestionsList = ({
                       name={`check_${q.id}`}
                       options={parsedQuestion.options}
                       disabled={isFormDisabled}
-                      selectedOptions={
-                        allResponses[`${q.id}`]
-                          ? (allResponses[`${q.id}`] as string[])
-                          : []
-                      }
-                      onChange={(selectedOptions: string[]) =>
-                        handleInputChange(`${q.id}`, selectedOptions)
-                      }
+                      selectedOptions={allResponses[`${q.id}`] ? (allResponses[`${q.id}`] as string[]) : []}
+                      onChange={(selectedOptions: string[]) => handleInputChange(`${q.id}`, selectedOptions)}
                     />
                   ) : (
                     <RadioInput
                       name={`radio_${q.id}`}
                       options={parsedQuestion.options}
                       disabled={isFormDisabled}
-                      selectedOption={
-                        allResponses[`${q.id}`]
-                          ? (allResponses[`${q.id}`] as string)
-                          : ""
-                      }
-                      onChange={(selectedOption: string) =>
-                        handleInputChange(`${q.id}`, selectedOption)
-                      }
+                      selectedOption={allResponses[`${q.id}`] ? (allResponses[`${q.id}`] as string) : ""}
+                      onChange={(selectedOption: string) => handleInputChange(`${q.id}`, selectedOption)}
                     />
                   )}
                 </ul>
               )}
               {!parsedQuestion.options && parsedQuestion.type === "input" && (
                 <TextInput
-                selectedOption={
-                    allResponses[`${q.id}`]
-                      ? (allResponses[`${q.id}`] as string)
-                      : ""
-                  }
+                  selectedOption={allResponses[`${q.id}`] ? (allResponses[`${q.id}`] as string) : ""}
                   disabled={isFormDisabled}
-                  onChange={(userInput: string) =>
-                    handleInputChange(`${q.id}`, userInput)
-                  }
+                  onChange={(userInput: string) => handleInputChange(`${q.id}`, userInput)}
                 />
               )}
             </li>
@@ -162,7 +125,7 @@ export const QuestionnaireQuestionsList = ({
         })}
       </ul>
       <div className="my-8 flex justify-end">
-        <SubmitBtn displayText={isFormDisabled ? "Go back" : "Submit"}/>
+        <SubmitBtn displayText={isFormDisabled ? "Go back" : "Submit"} />
       </div>
     </form>
   );

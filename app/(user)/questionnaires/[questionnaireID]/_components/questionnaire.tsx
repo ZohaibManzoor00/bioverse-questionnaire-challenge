@@ -1,7 +1,6 @@
 import { getQuestionsByQuestionnaireId } from "../actions/getQuestionnaireQuestions";
 import { QuestionnaireQuestionsList } from "./questionnaire-questionsList";
 import { NotFound } from "@/app/_components/error-not-found";
-
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 
 type QuestionnaireProps = {
@@ -10,8 +9,9 @@ type QuestionnaireProps = {
 
 export const Questionnaire = async ({ questionnaireId }: QuestionnaireProps): Promise<JSX.Element> => {
   const questionInfo = await getQuestionsByQuestionnaireId(questionnaireId);
-  if (!questionInfo) return <NotFound msg={"The questionnaire you are looking for does not exist."}/>;
-  
+
+  if (!questionInfo) return <NotFound msg={"The questionnaire you are looking for does not exist."} />;
+
   const { questionnaireQuestions, questionnaireName } = questionInfo;
 
   return (

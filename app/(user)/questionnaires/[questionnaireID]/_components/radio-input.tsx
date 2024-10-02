@@ -13,9 +13,7 @@ export const RadioInput = ({
   disabled,
   selectedOption,
 }: RadioInputProps): JSX.Element => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    onChange(e.target.value);
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => onChange(e.target.value);
 
   return (
     <ul>
