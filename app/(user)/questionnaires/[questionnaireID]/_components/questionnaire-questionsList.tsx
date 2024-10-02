@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
 import { Question } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
@@ -101,7 +100,7 @@ export const QuestionnaireQuestionsList = ({ questionnaireQuestions }: Questionn
                       options={parsedQuestion.options}
                       disabled={isFormDisabled}
                       selectedOptions={allResponses[`${q.id}`] ? (allResponses[`${q.id}`] as string[]) : []}
-                      onChange={(selectedOptions: string[]) =>handleInputChange(`${q.id}`, selectedOptions)}
+                      onChange={(selectedOptions: string[]) => handleInputChange(`${q.id}`, selectedOptions)}
                     />
                   ) : (
                     <RadioInput

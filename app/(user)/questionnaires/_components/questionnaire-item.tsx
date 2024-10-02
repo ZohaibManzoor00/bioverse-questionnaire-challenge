@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Questionnaire } from "@prisma/client";
-
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 
 type QuestionnaireItemProps = {
