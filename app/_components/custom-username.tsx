@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/authContext";
 import { Spinner } from "../(user)/questionnaires/_components/loading";
 
 export const CustomUsername = () => {
