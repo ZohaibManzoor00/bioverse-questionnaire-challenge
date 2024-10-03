@@ -1,4 +1,4 @@
-export const LoadingTableSkeleton = (): JSX.Element => {
+export const LoadingTableSkeleton = () => {
   return (
     <div className="space-y-4 bg-zinc-900 p-4 rounded">
       <div className="h-14 bg-zinc-700 rounded animate-pulse"></div>

@@ -4,7 +4,7 @@ type ErrorMessages = {
   general?: string;
 };
 
-export const renderErrors = (errors: ErrorMessages): JSX.Element | null => {
+export const renderErrors = (errors: ErrorMessages) => {
   if (!errors || Object.keys(errors).length === 0) return null;
 
   return (

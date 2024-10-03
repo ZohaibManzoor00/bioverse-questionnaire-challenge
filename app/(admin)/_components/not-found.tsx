@@ -1,4 +1,4 @@
-export const NotFound = (): JSX.Element => {
+export const NotFound = () => {
   return (
     <>
       <div className="flex h-96 justify-center items-center">

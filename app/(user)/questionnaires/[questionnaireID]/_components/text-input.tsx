@@ -4,11 +4,7 @@ type TextInputProps = {
   disabled: boolean;
 };
 
-export const TextInput = ({
-  onChange,
-  selectedOption,
-  disabled,
-}: TextInputProps): JSX.Element => {
+export const TextInput = ({ onChange, selectedOption, disabled }: TextInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => onChange(e.target.value);
 
   return (

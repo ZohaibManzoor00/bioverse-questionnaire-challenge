@@ -3,6 +3,7 @@ import { Navbar } from "../_components/navbar";
 
 import localFont from "next/font/local";
 import "../globals.css";
+import { AuthProvider } from "@/context/authContext";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -24,16 +25,20 @@ export const metadata: Metadata = {
 
 type QuestionnaireLayoutProps = {
   children: React.ReactNode;
-}
+};
 
-export default function QuestionnaireLayout({ children }: QuestionnaireLayoutProps): JSX.Element {
+export default function QuestionnaireLayout({
+  children,
+}: QuestionnaireLayoutProps) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <AuthProvider> 
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

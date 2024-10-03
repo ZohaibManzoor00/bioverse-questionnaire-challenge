@@ -3,6 +3,7 @@ import { Navbar } from "../_components/navbar";
 
 import localFont from "next/font/local";
 import "../globals.css";
+import { AuthProvider } from "@/context/authContext";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -26,14 +27,16 @@ type AdminLayoutProps = {
   children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
+export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

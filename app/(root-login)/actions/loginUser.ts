@@ -6,7 +6,7 @@ import { User } from "@prisma/client";
 type LogInCredentialsProps = Pick<User, "username" | "password">;
 export type LoggedInUser = Omit<User, "password">;
 
-const loginUser = async ({ username, password }: LogInCredentialsProps): Promise<LoggedInUser> => {
+const loginUserFromServer = async ({ username, password }: LogInCredentialsProps): Promise<LoggedInUser> => {
   const userInfo = (await db.user.findUnique({
     where: { username, password },
     select: { id: true, username: true, isAdmin: true },
@@ -42,7 +42,7 @@ export const loginUserAction = async (_: PrevStateProps, formData: FormData): Pr
 
   if (errors?.username || errors?.password) return { errors }
 
-  const user = await loginUser({ username, password });
+  const user = await loginUserFromServer({ username, password });
 
   if (!user) {
     errors.general = "Invalid login combination"

@@ -6,13 +6,7 @@ type RadioInputProps = {
   disabled: boolean;
 };
 
-export const RadioInput = ({
-  name,
-  options,
-  onChange,
-  disabled,
-  selectedOption,
-}: RadioInputProps): JSX.Element => {
+export const RadioInput = ({ name, options, onChange, disabled, selectedOption }: RadioInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => onChange(e.target.value);
 
   return (

@@ -5,7 +5,7 @@ type QuestionnairePageProps = {
   params: { questionnaireID: string };
 };
 
-export default async function QuestionnairePage({ params }: QuestionnairePageProps): Promise<JSX.Element> {
+export default async function QuestionnairePage({ params }: QuestionnairePageProps) {
   const questionnaireID = Number(params.questionnaireID);
 
   if (!questionnaireID) return <NotFound msg="Sorry, we couldn't find the page you're looking for." />;

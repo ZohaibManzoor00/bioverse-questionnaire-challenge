@@ -17,7 +17,7 @@ type SignInLayoutProps = {
   children: React.ReactNode;
 }
 
-export default function SignInLayout({ children }: SignInLayoutProps): JSX.Element {
+export default function SignInLayout({ children }: SignInLayoutProps) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
