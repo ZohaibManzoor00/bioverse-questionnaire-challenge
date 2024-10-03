@@ -1,15 +1,45 @@
 "use server";
 
 import { db } from "@/utils/db/db";
-import { SubmissionHistoryProps } from "../_components/submission-table";
 
-type ParsedQuestion = {
-  type: string;
-  question: string;
-  options?: string[];
+export type SubmissionHistory = {
+  id: number;
+  username: string;
+  questionnaires: {
+    questionnaireId: number;
+    questionnaireName: string;
+    questions: {
+      questionId: number;
+      questionInfo: ParsedQuestion;
+      response: string | string[];
+    }[];
+  }[];
 };
 
-export const loadSubmissionHistory = async (userId: number): Promise<SubmissionHistoryProps | null> => {
+export type ParsedQuestion = Shared & (TextInput | Checkbox | Radio);
+
+type ParsedResponse = OneElementArray<string> | string
+
+type Shared = {
+  type: string;
+  question: string;
+};
+
+type Radio = {
+  options: OneElementArray<string>;
+};
+
+type Checkbox = {
+  options: Array<string>;
+};
+
+type TextInput = {
+  options?: undefined;
+};
+
+type OneElementArray<T> = [T];
+
+export const loadSubmissionHistoryFromServer = async (userId: number): Promise<SubmissionHistory | null> => {
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
@@ -41,7 +71,7 @@ export const loadSubmissionHistory = async (userId: number): Promise<SubmissionH
     },
   });
 
-  if (!user) return null
+  if (!user) return null;
 
   return {
     id: user.id,
@@ -52,7 +82,7 @@ export const loadSubmissionHistory = async (userId: number): Promise<SubmissionH
       questions: submission.questionnaire.submissions.map((s) => ({
         questionId: s.question.id,
         questionInfo: s.question.question as ParsedQuestion,
-        response: s.response as string | string[],
+        response: s.response as ParsedResponse,
       })),
     })),
   };

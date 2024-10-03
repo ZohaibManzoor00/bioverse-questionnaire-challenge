@@ -1,63 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { loadSubmissionHistory } from "../actions/loadSubmissionHistory";
+import { loadSubmissionHistoryFromServer, SubmissionHistory } from "../actions/loadSubmissionHistory";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 import { Modal } from "./modal";
-
-export type SubmissionHistoryProps = {
-  id: number;
-  username: string;
-  questionnaires: {
-    questionnaireId: number;
-    questionnaireName: string;
-    questions: {
-      questionId: number;
-      questionInfo: ParsedQuestion;
-      response: string | string[];
-    }[];
-  }[];
-};
-
-export type ParsedQuestion = {
-  type: string;
-  question: string;
-  options?: string[];
-};
-
-export type SubmissionAggregatesProps = {
-  id: number;
-  questionnairesCompleted: number;
-  username: string;
-};
+import { SubmissionAggregates } from "../actions/loadSubmissionAggregates";
 
 type SubmissionTableProps = {
-  submissionAggregates: SubmissionAggregatesProps[];
+  submissionAggregates: SubmissionAggregates[];
 };
 
-export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps): JSX.Element => {
-  const [selectedUser, setSelectedUser] = useState<SubmissionHistoryProps | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps) => {
+  const [selectedSubmissionHistory, setSelectedUser] = useState<SubmissionHistory | null>(null);
+  const [_, setIsModalOpen] = useState(selectedSubmissionHistory !== null);
   const [loadingModalData, setLoadingModalData] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState(false);
+  const errorMessage = "Failed to load submission history";
 
-  const openModal = async (person: SubmissionAggregatesProps) => {
+  const openModal = async (person: SubmissionAggregates) => {
     setLoadingModalData(true);
     try {
-      const userHistory = await loadSubmissionHistory(person.id);
+      const userHistory = await loadSubmissionHistoryFromServer(person.id);
       setSelectedUser(userHistory);
       setIsModalOpen(true);
     } catch (err) {
-      setError(err as Error);
+      setError(true);
     } finally {
       setLoadingModalData(false);
     }
   };
 
-  const closeModal = () => {
-    setSelectedUser(null);
-    setIsModalOpen(false);
-  };
+  if (error) return errorMessage;
 
   return (
     <div className={`bg-zinc-900 rounded-md p-4 ${loadingModalData ? "animate-pulse" : ""}`}>
@@ -84,8 +57,7 @@ export const SubmissionTable = ({ submissionAggregates }: SubmissionTableProps):
                 ))}
               </tbody>
             </table>
-            {isModalOpen && selectedUser && <Modal selectedUser={selectedUser} closeModal={closeModal} />}
-            {error && <p className="mt-4 text-lg">Error: {error.message}</p>}
+            {selectedSubmissionHistory && <Modal selectedSubmissionHistory={selectedSubmissionHistory} closeModal={() => setSelectedUser(null)} />}
           </div>
         </div>
       </div>

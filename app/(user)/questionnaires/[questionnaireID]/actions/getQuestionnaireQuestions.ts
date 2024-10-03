@@ -3,14 +3,14 @@
 import { db } from "@/utils/db/db";
 import { Question, Submission } from "@prisma/client";
 
-import { QuestionnaireResponsesProps } from "../_components/questionnaire-questionsList";
+export type QuestionnaireResponses = Record<string, string | string[]>;
 
-type QuestionnaireQuestionsProps = {
+type QuestionnaireQuestions = {
   questionnaireName: string;
   questionnaireQuestions: Question[];
 }
 
-export const getQuestionsByQuestionnaireId = async (questionnaireId: number): Promise<QuestionnaireQuestionsProps | null> => {
+export const getQuestionnaireQuestionsFromServer = async (questionnaireId: number): Promise<QuestionnaireQuestions | null> => {
   const questionnaire = await db.questionnaire.findUnique({
     where: { id: questionnaireId },
     include: {
@@ -28,10 +28,10 @@ export const getQuestionsByQuestionnaireId = async (questionnaireId: number): Pr
 type SubmitQuestionnaireProps = {
   userId: number;
   questionnaireId: number;
-  responses: QuestionnaireResponsesProps[];
+  responses: QuestionnaireResponses[];
 };
 
-const submitQuestionnaire = async ({ userId, questionnaireId, responses }: SubmitQuestionnaireProps) => {
+const submitQuestionnaireToServer = async ({ userId, questionnaireId, responses }: SubmitQuestionnaireProps) => {
   const submissions = await Promise.all(
     responses.map((response) =>
       db.submission.create({
@@ -50,7 +50,7 @@ const submitQuestionnaire = async ({ userId, questionnaireId, responses }: Submi
 type Status = "completed" | "failed";
 
 type PrevStateProps = {
-  responses?: QuestionnaireResponsesProps;
+  responses?: QuestionnaireResponses;
   userId?: number;
   status?: Status;
   questionnaireID?: string;
@@ -63,7 +63,7 @@ export const submitQuestionnaireAction = async (prevState: PrevStateProps): Prom
     { questionId, response }
   ));
 
-  await submitQuestionnaire({
+  await submitQuestionnaireToServer({
     userId: prevState.userId,
     questionnaireId: +prevState.questionnaireID,
     responses: formattedResponses,
@@ -72,7 +72,7 @@ export const submitQuestionnaireAction = async (prevState: PrevStateProps): Prom
   return { responses: prevState.responses, userId: prevState.userId, status: "completed" };
 };
 
-export const getUserSubmission = async (userId: number, questionnaireId: string): Promise<Submission[]> => {
-  const submissions = await db.submission.findMany({ where: { userId, questionnaireId: +questionnaireId } });
+export const getUserSubmissionsFromServer = async (userId: number, questionnaireId: string): Promise<Submission[]> => {
+  const submissions = await db.submission.findMany({ where: { userId, questionnaireId: Number(questionnaireId) } });
   return submissions
 };

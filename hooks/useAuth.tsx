@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 type LoggedInUser = Omit<User, "password">;
 
 export const useAuth = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<LoggedInUser | null>(null);
 
@@ -15,14 +15,14 @@ export const useAuth = () => {
     const jsonUser = localStorage.getItem("user");
 
     if (!jsonUser) {
-      setLoading(false)
-      router.replace('/')
-      return 
+      setLoading(false);
+      router.replace("/");
+      return;
     }
 
-    const parsedUser = JSON.parse(jsonUser) as LoggedInUser
+    const parsedUser = JSON.parse(jsonUser) as LoggedInUser;
 
-    setUser(parsedUser)
+    setUser(parsedUser);
     setLoading(false);
   }, [router]);
 

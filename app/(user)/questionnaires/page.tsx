@@ -2,7 +2,7 @@ import { QuestionnaireList } from "./_components/questionnaire-list";
 import { getQuestionnaires } from "./actions/getQuestionnaires";
 import { WelcomeUserMsg } from "./_components/welcome-msg";
 
-export default async function QuestionnairesPage(): Promise<JSX.Element> {
+export default async function QuestionnairesPage() {
   const allQuestionnaires = await getQuestionnaires();
 
   return (

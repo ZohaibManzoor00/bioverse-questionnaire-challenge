@@ -5,7 +5,7 @@ type NotFoundProps = {
   msg: string;
 };
 
-export const NotFound = ({ msg }: NotFoundProps): JSX.Element => {
+export const NotFound = ({ msg }: NotFoundProps) => {
   return (
     <div className="pt-28 flex items-center justify-center px-6">
       <div className="text-center">

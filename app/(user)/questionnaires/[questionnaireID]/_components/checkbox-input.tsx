@@ -6,13 +6,8 @@ type CheckboxInputProps = {
   disabled: boolean;
 };
 
-export const CheckboxInput = ({
-  name,
-  options,
-  onChange,
-  selectedOptions,
-  disabled,
-}: CheckboxInputProps): JSX.Element => {
+export const CheckboxInput = ({ name, options, onChange, selectedOptions, disabled }: CheckboxInputProps) => {
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value, checked } = e.target;
 

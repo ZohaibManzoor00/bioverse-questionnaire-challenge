@@ -1,11 +1,11 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
 import { capitalizeFirstLetter } from "@/utils/common-utils";
 import { Spinner } from "./loading";
+import { useAuth } from "@/context/authContext";
 
-export const WelcomeUserMsg = (): JSX.Element | null => {
-  const { user, loading } = useAuth();
+export const WelcomeUserMsg = () => {
+  const { user, loading } = useAuth()
 
   if (loading) return <Spinner className="h-9 w-6" />
 
